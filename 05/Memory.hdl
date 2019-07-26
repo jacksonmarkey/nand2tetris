@@ -1,0 +1,57 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/05/Memory.hdl
+
+/**
+ * The complete address space of the Hack computer's memory,
+ * including RAM and memory-mapped I/O.
+ * The chip facilitates read and write operations, as follows:
+ *     Read:  out(t) = Memory[address(t)](t)
+ *     Write: if load(t-1) then Memory[address(t-1)](t) = in(t-1)
+ * In words: the chip always outputs the value stored at the memory
+ * location specified by address. If load==1, the in value is loaded
+ * into the memory location specified by address. This value becomes
+ * available through the out output from the next time step onward.
+ * Address space rules:
+ * Only the upper 16K+8K+1 words of the Memory chip are used.
+ * Access to address>0x6000 is invalid. Access to any address in
+ * the range 0x4000-0x5FFF results in accessing the screen memory
+ * map. Access to address 0x6000 results in accessing the keyboard
+ * memory map. The behavior in these addresses is described in the
+ * Screen and Keyboard chip specifications given in the book.
+ */
+
+CHIP Memory {
+    IN in[16], load, address[15];
+    OUT out[16];
+
+    PARTS:
+    // Put your code here:
+
+    // decides if our address is referring to the main memory - this is
+    // equivalent to the last bit of address being 0, since this specifies
+    // bits number 0 to 16383
+    Not(in = address[14], out = mainMem);
+    And(a = mainMem, b = load, out = loadMainMem);
+    RAM16K(in = in, load = loadMainMem, address = address[0..13], out = out0);
+
+    // decides ifaddress is referring to screen memory - this is
+    // equivalent to the last bit of the address being 1 and the second to last
+    // bit being 0, since this covers bits number 16384 to 24575
+    Not(in = address[13], out = notKeyboard);
+    And(a = address[14], b = notKeyboard, out = screenMem);
+    And(a = screenMem, b = load, out = loadScreenMem);
+    Screen(in = in, load = loadScreenMem, address = address[0..12], out = out1);
+
+    // decides whether the address refers to the keybooard - in this case we
+    // don't store anything here, but we do output whatever we recieve from
+    // our keyboard chip
+    And(a = address[13], b = address[14], out = keyboardMem);
+    Keyboard(out = out2);
+
+    // chooses what to output, again based on whether our address referred to
+    // the main memory, the screen memory, or the keyboard
+    Mux16(a = out1, b = out2, sel = address[13], out = out3);
+    Mux16(a = out0, b = out3, sel = address[14], out = out);
+}
