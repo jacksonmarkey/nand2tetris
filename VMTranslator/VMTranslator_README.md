@@ -1,0 +1,4 @@
+# VMTranslator_README
+This folder contains a complete implementation of a virtual machine translator on the Hack platform. It meets all the specifications of the standard VM-to-Hack mapping described in chapters 7 and 8 from Nand2Tetris.
+
+This implementation is written in Python. To run the program from the command line, you should compile the file VMTranslator.py followed by a single argument - a path. This path is either a .vm file itself or a directory containing .vm files. The translator creates a .asm file of the same name as the input path, or overwrites the existing .asm file if it exists already. The output file is assembly code representing the .vm file or files in the Hack assembly language.

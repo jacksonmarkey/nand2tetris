@@ -3,6 +3,6 @@ _Building a Modern Computer from First Principles_
 
 In this repository I'll update my progress as I complete the [nand2tetris](https://www.nand2tetris.org) open source courseware.
 
-Note that I am only uploading my /projects folder. If you are interested in completing the course yourself, go to the nand2tetris website linked above and follow their instructions for setting up the development environment.
+Note that I am only uploading my /projects folder. If you are interested in completing the course yourself, go to the nand2tetris website linked above and follow their instructions for setting up the development environment. Specifically, the /tools folder is missing from this repository.
 
-MOST RECENTLY COMPLETED CHAPTER: 5
+MOST RECENTLY COMPLETED CHAPTER: 8
